@@ -244,6 +244,82 @@
             box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
         }
         
+        /* Mobile Bottom Navigation */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            padding: 8px 0;
+            padding-bottom: calc(8px + env(safe-area-inset-bottom));
+        }
+        
+        .mobile-bottom-nav .nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .mobile-bottom-nav .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #6c757d;
+            padding: 4px 12px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            min-width: 60px;
+        }
+        
+        .mobile-bottom-nav .nav-item:hover,
+        .mobile-bottom-nav .nav-item.active {
+            color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        .mobile-bottom-nav .nav-item i {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+        }
+        
+        .mobile-bottom-nav .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        
+        .mobile-bottom-nav .nav-item.menu-toggle {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 50%;
+            margin-top: -20px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .mobile-bottom-nav .nav-item.menu-toggle:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: #fff;
+        }
+        
+        .mobile-bottom-nav .nav-item.menu-toggle i {
+            margin-bottom: 0;
+        }
+        
+        .mobile-bottom-nav .nav-item.menu-toggle span {
+            display: none;
+        }
+        
         /* Mobile responsive */
         @media (max-width: 991.98px) {
             .sidebar {
@@ -256,6 +332,11 @@
             
             .main-content {
                 margin-left: 0;
+                padding-bottom: 80px; /* Space for bottom nav */
+            }
+            
+            .mobile-bottom-nav {
+                display: block;
             }
             
             .sidebar-overlay {
@@ -271,6 +352,22 @@
             
             .sidebar-mobile-show .sidebar-overlay {
                 display: block;
+            }
+            
+            /* Hide desktop toggle on mobile when bottom nav is visible */
+            .btn-toggle-sidebar {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 575.98px) {
+            .mobile-bottom-nav .nav-item {
+                padding: 4px 8px;
+                min-width: 50px;
+            }
+            
+            .mobile-bottom-nav .nav-item span {
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -468,6 +565,31 @@
             <?= $this->renderSection('content') ?>
         </div>
     </main>
+    
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <div class="nav-items">
+            <a href="<?= base_url('dashboard') ?>" class="nav-item <?= uri_string() == 'dashboard' ? 'active' : '' ?>">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="<?= base_url('attendance/clock') ?>" class="nav-item <?= strpos(uri_string(), 'attendance/clock') !== false ? 'active' : '' ?>">
+                <i class="fas fa-fingerprint"></i>
+                <span>Absen</span>
+            </a>
+            <a href="javascript:void(0)" class="nav-item menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-th"></i>
+            </a>
+            <a href="<?= base_url('leave') ?>" class="nav-item <?= uri_string() == 'leave' || strpos(uri_string(), 'leave/') !== false ? 'active' : '' ?>">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Cuti</span>
+            </a>
+            <a href="<?= base_url('payroll/my-slips') ?>" class="nav-item <?= strpos(uri_string(), 'payroll/my-slips') !== false ? 'active' : '' ?>">
+                <i class="fas fa-wallet"></i>
+                <span>Gaji</span>
+            </a>
+        </div>
+    </nav>
     
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
